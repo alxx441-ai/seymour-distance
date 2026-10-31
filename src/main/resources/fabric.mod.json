@@ -6,7 +6,7 @@
   "description": "Affiche la norme L2 (distance euclidienne dans R^3 / RGB) entre la couleur des pièces de Seymour et une couleur de référence.",
   "environment": "client",
   "entrypoints": {
-    "client": ["fr.example.seymourdist.SeymourNormClient"]
+    "client": ["fr.example.seymourdist.SeymourDistanceClient"]
   },
   "depends": {
     "fabricloader": ">=0.17.0",
