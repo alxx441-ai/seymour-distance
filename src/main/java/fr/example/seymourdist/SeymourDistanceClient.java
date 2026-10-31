@@ -14,7 +14,7 @@ import net.minecraft.world.item.component.DyedItemColor;
 
 import java.util.Set;
 
-public class SeymourNormClient implements ClientModInitializer {
+public class SeymourDistanceClient implements ClientModInitializer {
 
     /** IDs SkyBlock des pièces de Seymour. */
     private static final Set<String> SEYMOUR_IDS = Set.of(
