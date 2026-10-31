@@ -4,6 +4,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+import net.fabricmc.fabric.api.client.message.v1.ClientSendMessageEvents;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
@@ -13,12 +14,16 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.DyedItemColor;
 
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class SeymourDistanceClient implements ClientModInitializer {
 
     /** IDs SkyBlock des pièces de Seymour. */
     private static final Set<String> SEYMOUR_IDS = Set.of(
             "VELVET_TOP_HAT", "CASHMERE_JACKET", "SATIN_TROUSERS", "OXFORD_SHOES");
+
+    /** Seuil de "match" : norme L2 inférieure ou égale à cette valeur. */
+    private static final double MATCH_MAX = 40.0;
 
     /** Couleur de référence (RGB), modifiable via /seymour. */
     private static volatile int[] ref = null;
@@ -46,6 +51,15 @@ public class SeymourDistanceClient implements ClientModInitializer {
                         return 1;
                     }))));
 
+        // !paff dans le chat -> "Mon paff fait x cm" (x aléatoire entre 5 et 22)
+        ClientSendMessageEvents.MODIFY_CHAT.register(message -> {
+            if (message.trim().equalsIgnoreCase("!paff")) {
+                int x = ThreadLocalRandom.current().nextInt(5, 23); // 5 à 22 inclus
+                return "Mon paff fait " + x + " cm";
+            }
+            return message;
+        });
+
         ItemTooltipCallback.EVENT.register((stack, context, flag, lines) -> {
             int[] r = ref;
             if (r == null || !isSeymour(stack)) return;
@@ -63,6 +77,11 @@ public class SeymourDistanceClient implements ClientModInitializer {
                     : norm <= 30 ? ChatFormatting.YELLOW : ChatFormatting.RED;
 
             lines.add(Component.literal(String.format("Norme L2 : %.2f", norm)).withStyle(fmt));
+
+            if (norm <= MATCH_MAX) {
+                lines.add(Component.literal("★ MATCH (≤ " + (int) MATCH_MAX + ")")
+                        .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+            }
         });
     }
 
