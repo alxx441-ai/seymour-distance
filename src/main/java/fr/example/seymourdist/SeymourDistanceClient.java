@@ -1,4 +1,4 @@
-package fr.seymournorm;
+package fr.example.seymourdist;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
