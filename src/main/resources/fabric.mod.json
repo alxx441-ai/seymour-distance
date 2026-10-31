@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "seymournorm",
+  "version": "1.0.0",
+  "name": "Seymour Norm",
+  "description": "Affiche la norme L2 (distance euclidienne dans R^3 / RGB) entre la couleur des pièces de Seymour et une couleur de référence.",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["fr.seymournorm.SeymourNormClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.17.0",
+    "fabric-api": "*",
+    "minecraft": "~26.2"
+  }
+}
