@@ -1,7 +1,7 @@
 package fr.seymournorm;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -27,13 +27,13 @@ public class SeymourDistanceClient implements ClientModInitializer {
     public void onInitializeClient() {
         // /seymour <hex>  ou  /seymour <r> <g> <b>   (ex: /seymour 1F0030  |  /seymour 31 0 48)
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
-            dispatcher.register(ClientCommandManager.literal("seymour")
-                .then(ClientCommandManager.literal("clear").executes(ctx -> {
+            dispatcher.register(ClientCommands.literal("seymour")
+                .then(ClientCommands.literal("clear").executes(ctx -> {
                     ref = null;
                     ctx.getSource().sendFeedback(Component.literal("Couleur de référence effacée."));
                     return 1;
                 }))
-                .then(ClientCommandManager.argument("couleur", StringArgumentType.greedyString())
+                .then(ClientCommands.argument("couleur", StringArgumentType.greedyString())
                     .executes(ctx -> {
                         int[] c = parse(StringArgumentType.getString(ctx, "couleur"));
                         if (c == null) {
